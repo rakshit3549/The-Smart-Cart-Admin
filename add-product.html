@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="icon" href="img/cart.svg" type="image/x-icon">
+  <title>The Smart Cart - Add Product</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700" />
+  <!-- https://fonts.google.com/specimen/Roboto -->
+  <link rel="stylesheet" href="css/fontawesome.min.css" />
+  <!-- https://fontawesome.com/ -->
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <!-- https://getbootstrap.com/ -->
+  <link rel="stylesheet" href="css/templatemo-style.css">
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+</head>
+
+<body>
+  <nav id="home" class="navbar navbar-expand-xl">
+    <div class="container h-100">
+      <a class="navbar-brand" href="index.html">
+        <h1 class="tm-site-title mb-0">The Smart Cart</h1>
+      </a>
+      <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse"
+        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <i class="fas fa-bars tm-nav-icon"></i>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto h-100">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">
+              <i class="fas fa-tachometer-alt"></i> Dashboard
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link active" href="products.html">
+              <i class="fas fa-shopping-cart"></i> Products
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="accounts.html">
+              <i class="far fa-user"></i> Accounts
+            </a>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container tm-mt-big tm-mb-big">
+
+    <div id="errorAlert" class=" mb-5 alert alert-danger alert-dismissible in collapse" role="alert">
+      <strong>Alert ❗ ,</strong> Please fill the required fields.
+      <button id="errorAlertBtn" type="button" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div id="successAlert" class="alert alert-light alert-dismissible in collapse" role="alert">
+      <strong>Success 🎉 ,</strong> Product added successfully.
+      <button id="successAlertBtn" type="button" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
+        <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+          <div class="row">
+            <div class="col-12">
+              <h2 class="tm-block-title d-inline-block">Add Product</h2>
+            </div>
+          </div>
+          <div class="row tm-edit-product-row">
+            <div class="col-xl-6 col-lg-6 col-md-12">
+              <!-- ///////// -->
+              <form id="add" name="addProduct" class="tm-edit-product-form">
+                <!-- //////// -->
+                <div class="form-group mb-3">
+                  <label for="companyName">Company Name 🏭</label>
+                  <input id="companyName" name="company" type="text" class="form-control validate" required />
+                </div>
+                <div class="form-group mb-3">
+                  <label for="productName">Product Name 🍫</label>
+                  <input id="productName" name="name" type="text" class="form-control validate" required />
+                </div>
+                <div class="form-group mb-3">
+                  <label for="barcodeNumber">Barcode Number 📄 <span style="color:#ff0000">*</span></label>
+                  <input id="barcodeNumber" name="id" type="number" class="form-control validate" required />
+                </div>
+                <div class="row">
+                  <div class="form-group mb-3 col-xs-12 col-sm-6">
+                    <label for="price">Price ₹ </label>
+                    <input id="price" name="mrp" type="number" class="form-control validate" data-large-mode="true" />
+                  </div>
+                  <div class="form-group mb-3 col-xs-12 col-sm-6">
+                    <label for="stock">Units In Stock 📦 <span style="color:#ff0000">*</span>
+                    </label>
+                    <input id="stock" name="currentQuantity" type="number" class="form-control validate" required />
+                  </div>
+                </div>
+
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
+              <div class="tm-product-img-dummy mx-auto">
+                <div id="placeholder" class="fas fa-cloud-upload-alt tm-upload-icon" style="display: block;"></div>
+                <div id="imageHolder" class="imageHolder">
+                  <!-- <img id="item" src="https://via.placeholder.com/280" alt="placeholder" > -->
+                  <img id="item" src="#" alt="placeholder" style="display: none;" />
+                </div>
+
+              </div>
+              <div class="custom-file mt-3 mb-3">
+                <input id="fileInput" type="file" style="display:none;" accept="image/*" />
+                <input type="button" class="btn btn-primary btn-block mx-auto" name="img" value="UPLOAD PRODUCT IMAGE"
+                  onclick="document.getElementById('fileInput').click();" />
+              </div>
+            </div>
+            <div class="col-12">
+              <button id="myAnchor" type="submit" name="submit" class="btn btn-primary btn-block text-uppercase"> Add
+                Product Now</button>
+            </div>
+            <!-- //// -->
+            </form>
+            <!-- ///// -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="tm-footer row tm-mt-small">
+    <div class="col-12 font-weight-light">
+      <h6 class="text-left text-white ml-5" style="padding-top: 10px; ">
+        Contact : <a class="text-white" style="text-decoration: underline" href="mailto:rakshitshetty26@gmail.com">
+          TheSmartCartAdmin.com</a></h6>
+      <p class="text-right  mb-0 px-5 "><a class="text-white" style="bottom: 0; text-decoration: underline; "
+          href="#home">Back
+          to Top</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <!-- https://jquery.com/download/ -->
+  <script src="js/bootstrap.min.js"></script>
+  <!-- https://getbootstrap.com/ -->
+
+
+  <script type="text/javascript" src="config/config.js"></script>
+
+  <script type="module">
+
+    firebase.initializeApp(firebaseConfig());
+
+    let dbFirestore = firebase.firestore();
+    let dbStore = firebase.storage();
+
+
+    let imageLocation = null;
+    let imageUrl = null;
+    let imageName;
+    let obj;
+
+
+
+    function updateImageUrl(input) {
+      var input = document.getElementById("fileInput")
+      if (input.files[0]) {
+        if (input.files[0].type.match(/image.*/)) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            $('#item').attr('src', e.target.result).width(280).height(280);
+          };
+          document.getElementById("placeholder").style.display = "none";
+          reader.readAsDataURL(input.files[0]);
+          document.getElementById("item").style.display = "block";
+          imageLocation = input.files[0];
+
+        } else {
+          removeOldImg('imageHolder');
+          imageLocation = null;
+        }
+      }
+    }
+
+    $("#fileInput").on("change", updateImageUrl);
+
+    $('#errorAlertBtn').click(function () {
+      $('#errorAlert').hide();
+    });
+
+    $('#successAlertBtn').click(function () {
+      $('#successAlert').hide('fade');
+    });
+
+    function removeOldImg(className) {
+      document.getElementById("placeholder").style.display = "block"
+      document.getElementById('item').style.display = "none"
+    }
+
+    document.getElementById("myAnchor").addEventListener("click", function (event) {
+      event.preventDefault()
+      var elements = document.getElementById("add").elements;
+      obj = {};
+      for (var i = 0; i < elements.length; i++) {
+        var item = elements.item(i);
+        if ((item.value == "") || (item.name == "") || (item.name == "img")) {
+          continue;
+        }
+        if ((item.name == "currentQuantity") || (item.name == "mrp")) {
+          var val = parseInt(item.value);
+        } else {
+          var val = item.value;
+        }
+        obj[item.name] = val;
+      };
+
+      if ((Object.keys(obj).length > 1) && (obj["id"] !== undefined) && (obj['currentQuantity'] !== undefined)) {
+
+
+        if (imageLocation != null) {
+          var storageRef = dbStore.ref();
+          var uploadTask = storageRef.child('images/' + obj.id + '.jpg');
+          uploadTask.put(imageLocation).then((snapshot) => {
+            snapshot.ref.getDownloadURL().then((downloadURL) => {
+              imageUrl = downloadURL;
+              obj['imageUrl'] = imageUrl;
+              updateToDatabase();
+              console.log('Data added with image');
+            });
+          },
+            (error) => {
+              alert('Error in uploading file')
+            },
+          );
+
+        } else {
+          var myObj = obj
+          var objLength = Object.keys(myObj).length;
+          if (objLength == 5) {
+            updateToDatabase();
+            console.log('Data added without image');
+          } else if ((objLength == 2)) {
+            incrementUnits();
+            console.log('Current quantity incremented successfully');
+          } else {
+            console.log("Nothing")
+          }
+        }
+
+      } else {
+        $('#successAlert').hide('fade');
+        $('#errorAlert').show('fade');
+      }
+
+
+    });
+
+    function incrementUnits() {
+      dbFirestore.collection("Items").doc(obj.id).update({
+        currentQuantity: firebase.firestore.FieldValue.increment(obj.currentQuantity)
+      }).then(() => {
+        document.getElementById("add").reset();
+        console.log("Document successfully written!");
+        imageLocation == null;
+        imageUrl = null;
+        obj = {};
+        $('#errorAlert').hide('fade');
+        $('#successAlert').show('fade');
+      });
+    }
+
+    function updateToDatabase() {
+      dbFirestore.collection("Items").doc(obj.id).set(obj, { merge: true })
+        .then(() => {
+          document.getElementById("add").reset();
+          console.log("Document successfully written!");
+          removeOldImg('imageHolder');
+          imageLocation == null;
+          imageUrl = null;
+          obj = {};
+          $('#errorAlert').hide('fade');
+          $('#successAlert').show('fade');
+        })
+        .catch((error) => {
+          console.error("Error writing document: ", error);
+        });
+    }
+
+  </script>
+
+</body>
+
+</html>

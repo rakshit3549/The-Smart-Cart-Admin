@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="icon" href="img/cart.svg" type="image/x-icon">
+  <title>The Smart Cart - Product Page</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700" />
+  <!-- https://fonts.google.com/specimen/Roboto -->
+  <link rel="stylesheet" href="css/fontawesome.min.css" />
+  <!-- https://fontawesome.com/ -->
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <!-- https://getbootstrap.com/ -->
+  <link rel="stylesheet" href="css/templatemo-style.css">
+
+  <link rel="stylesheet" href="css/news_ticker.css">
+
+  <!--
+	Product Admin CSS Template
+	https://templatemo.com/tm-524-product-admin
+	-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+</head>
+
+<body id="reportsPage">
+  <nav id="home" class="navbar navbar-expand-xl">
+    <div class="container h-100">
+      <a class="navbar-brand" href="index.html">
+        <h1 class="tm-site-title mb-0">The Smart Cart</h1>
+      </a>
+      <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse"
+        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <i class="fas fa-bars tm-nav-icon"></i>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto h-100">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">
+              <i class="fas fa-tachometer-alt"></i> Dashboard
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="products.html">
+              <i class="fas fa-shopping-cart"></i> Products
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="accounts.html">
+              <i class="far fa-user"></i> Accounts
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col mb-3" style="padding-left: 10px;padding-right: 10px;">
+        <div id="news-ticker-wrapper" class="ticker-wrapper-h" style="display: none;">
+          <div class="heading">Important ❗</div>
+          <ul id="news_ticker" class="news-ticker-h">
+            <!-- <li>Good Day Cashew Cookies 36g : 8</li> -->
+          </ul>
+        </div>
+
+        <p class="text-white mb-1 mt-3 pl-2"><b>Product Details</b></p>
+
+        <div class="search-box mt-3">
+          <form class="container-fluid p-0">
+            <div class="input-group">
+              <input id="search" type="text" class=" text-light form-control" placeholder="🔍Product"
+                aria-label="Product" aria-describedby="basic-addon1">
+              <span class="input-group-text " aria-label="Small" id="inputGroup-sizing-sm">🕵️‍♂️Type to Search</span>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+    <div id="product-table" class="row tm-content-row ">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 tm-block-col">
+        <div class="tm-bg-primary-dark tm-block tm-block-products">
+          <div class="tm-product-table-container">
+            <table id="table" class="table  tm-table-small text-center tm-product-table">
+              <thead>
+                <tr>
+                  <th scope="col">&nbsp;</th>
+                  <th scope="col">PRODUCT NAME🛒</th>
+                  <th scope="col">BARCODE NUMBER📄</th>
+                  <th scope="col">IN STOCK 📦</th>
+                  <th scope="col">PRICE ₹</th>
+                  <th scope="col">&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody id='items' class="content-table">
+                <!-- <tr>
+                  <td> </td>
+                  <td>Vita Marie Gold 72g</td>
+                  <td>8901063014244</td>
+                  <td>18</td>
+                  <td>23</td>
+                  <td> </td>
+                </tr> -->
+              </tbody>
+            </table>
+          </div>
+          <!-- table container -->
+          <a href="add-product.html" class="btn btn-primary btn-block text-uppercase mb-3">Add new product</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="tm-footer row tm-mt-small">
+    <div class="col-12 font-weight-light">
+      <h6 class="text-left text-white ml-5" style="padding-top: 10px; ">
+        Contact : <a class="text-white" style="text-decoration: underline" href="mailto:rakshitshetty26@gmail.com">
+          TheSmartCartAdmin.com</a></h6>
+      <p class="text-right  mb-0 px-5 "><a class="text-white" style="bottom: 0; text-decoration: underline; "
+          href="#home">Back
+          to Top</a>
+      </p>
+    </div>
+
+  </footer>
+
+  <!-- <script src="js/jquery-3.3.1.min.js"></script>
+  https://jquery.com/download/ -->
+  <script src="js/bootstrap.min.js"></script>
+  <!-- https://getbootstrap.com/ -->
+
+  <script type="text/javascript" src="config/config.js"></script>
+
+  <script type="module">
+
+    firebase.initializeApp(firebaseConfig());
+    let dbFirestore = firebase.firestore();
+
+    dbFirestore.collection("Items").get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+
+        if (doc.data() != null) {
+
+          var tr = document.createElement('tr');
+          tr.innerHTML = `
+                          <td> </td>
+                          <td>${doc.data().name}</td>
+                          <td>${doc.data().id}</td>
+                          <td>${doc.data().currentQuantity}</td>
+                          <td>${doc.data().mrp}</td>
+                          <td> </td>
+                        `;
+          document.getElementById('items').appendChild(tr);
+
+          if (doc.data().currentQuantity < 20) {
+            var ul = document.getElementById('news_ticker');
+            var li = document.createElement('li');
+            li.innerHTML = ` ${doc.data().name} : <span style="color: #F05F3F;font-weight: bold; margin-right: 3px; margin-left: 3px">
+             ${doc.data().currentQuantity}  Units </span>`;
+            ul.appendChild(li);
+          }
+
+        };
+
+      });
+    }).then(() => {
+      var ul = document.getElementById('news_ticker');
+      var li = document.createElement('li');
+      li.appendChild(document.createTextNode(`🔚`));
+      ul.appendChild(li);
+      if (document.getElementById('news_ticker').getElementsByTagName('li').length == 1) {
+        document.getElementById('news-ticker-wrapper').style.display = "none"
+      }
+      else {
+        document.getElementById('news-ticker-wrapper').style.display = "flex"
+      }
+      var $rows = $('#table #items tr');
+      $('#search').keyup(function () {
+
+        var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+          reg = RegExp(val, 'i'),
+          text;
+
+        $rows.show().filter(function () {
+          text = $(this).text().replace(/\s+/g, ' ');
+          return !reg.test(text);
+        }).hide();
+      });
+    });
+
+    $(window).click(function () {
+      $("#search").val('').trigger("keyup");
+    });
+
+    $('#product-table, #search').click(function (event) {
+      event.stopPropagation();
+    });
+
+
+  </script>
+
+</body>
+
+</html>
